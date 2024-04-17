@@ -1,0 +1,41 @@
+{% extends 'back.base.html.twig' %}
+
+{% block title %}Stock index{% endblock %}
+
+{% block body %}
+    <h1>Stock index</h1>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Stockid</th>
+                <th>Prixunitaires</th>
+                <th>Codeproduits</th>
+                <th>Quantites</th>
+                <th>Daterestocks</th>
+                <th>actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for stock in stocks %}
+            <tr>
+                <td>{{ stock.stockid }}</td>
+                <td>{{ stock.prixunitaires }}</td>
+                <td>{{ stock.codeproduits }}</td>
+                <td>{{ stock.quantites }}</td>
+                <td>{{ stock.daterestocks ? stock.daterestocks|date('Y-m-d') : '' }}</td>
+                <td>
+                    <a href="{{ path('app_stock_show', {'stockid': stock.stockid}) }}">show</a>
+                    <a href="{{ path('app_stock_edit', {'stockid': stock.stockid}) }}">edit</a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="6">no records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{{ path('app_stock_new') }}">Create new</a>
+{% endblock %}

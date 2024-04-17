@@ -1,0 +1,41 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Entrepot index{% endblock %}
+
+{% block body %}
+    <h1>Entrepot index</h1>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Entrepotid</th>
+                <th>Nome</th>
+                <th>Adressee</th>
+                <th>Capacitee</th>
+                <th>Statute</th>
+                <th>actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for entrepot in entrepots %}
+            <tr>
+                <td>{{ entrepot.entrepotid }}</td>
+                <td>{{ entrepot.nome }}</td>
+                <td>{{ entrepot.adressee }}</td>
+                <td>{{ entrepot.capacitee }}</td>
+                <td>{{ entrepot.statute }}</td>
+                <td>
+                    <a href="{{ path('app_entrepot_show', {'entrepotid': entrepot.entrepotid}) }}">show</a>
+                    <a href="{{ path('app_entrepot_edit', {'entrepotid': entrepot.entrepotid}) }}">edit</a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="6">no records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{{ path('app_entrepot_new') }}">Create new</a>
+{% endblock %}

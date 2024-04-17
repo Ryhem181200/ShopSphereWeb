@@ -1,0 +1,40 @@
+{% extends 'back.base.html.twig' %}
+
+{% block title %}Entrepot{% endblock %}
+
+{% block body %}
+<div class="container">
+    <h1>Entrepot</h1>
+
+    <table class="table">
+        <tbody>
+            <tr>
+                <th>Entrepotid</th>
+                <td>{{ entrepot.entrepotid }}</td>
+            </tr>
+            <tr>
+                <th>Nome</th>
+                <td>{{ entrepot.nome }}</td>
+            </tr>
+            <tr>
+                <th>Adressee</th>
+                <td>{{ entrepot.adressee }}</td>
+            </tr>
+            <tr>
+                <th>Capacitee</th>
+                <td>{{ entrepot.capacitee }}</td>
+            </tr>
+            <tr>
+                <th>Statute</th>
+                <td>{{ entrepot.statute }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <a class="btn btn-primary" href="{{ path('app_entrepot_index') }}">back to list</a>
+
+    <a class="btn btn-primary"  href="{{ path('app_entrepot_edit', {'entrepotid': entrepot.entrepotid}) }}">edit</a>
+
+    {{ include('entrepot/_delete_form.html.twig') }}
+    </div>
+{% endblock %}

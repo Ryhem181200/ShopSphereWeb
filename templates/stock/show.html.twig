@@ -1,0 +1,40 @@
+{% extends 'back.base.html.twig' %}
+
+{% block title %}Stock{% endblock %}
+
+{% block body %}
+<div class="container">
+    <h1>Stock</h1>
+
+    <table class="table">
+        <tbody>
+            <tr>
+                <th>Stockid</th>
+                <td>{{ stock.stockid }}</td>
+            </tr>
+            <tr>
+                <th>Prixunitaires</th>
+                <td>{{ stock.prixunitaires }}</td>
+            </tr>
+            <tr>
+                <th>Codeproduits</th>
+                <td>{{ stock.codeproduits }}</td>
+            </tr>
+            <tr>
+                <th>Quantites</th>
+                <td>{{ stock.quantites }}</td>
+            </tr>
+            <tr>
+                <th>Daterestocks</th>
+                <td>{{ stock.daterestocks ? stock.daterestocks|date('Y-m-d') : '' }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <a class="btn btn-primary" href="{{ path('app_stock_index') }}">back to list</a>
+
+    <a class="btn btn-primary" href="{{ path('app_stock_edit', {'stockid': stock.stockid}) }}">edit</a>
+
+    {{ include('stock/_delete_form.html.twig') }}
+    </div>
+{% endblock %}

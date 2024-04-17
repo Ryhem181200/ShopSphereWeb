@@ -1,0 +1,60 @@
+{% extends 'back.base.html.twig' %}
+
+
+
+
+{% block body %}
+<div class="container-fluid">
+
+                    <!-- Page Heading -->
+                    <h1 class="h3 mb-2 text-gray-800">Stock</h1>
+                    <p class="mb-4">Stock <a target="_blank"
+                            href="https://datatables.net"></a>.</p>
+
+                    <!-- DataTales Example -->
+                    <div class="card shadow mb-4">
+                        <div class="card-header py-3">
+                            <h6 class="m-0 font-weight-bold text-primary">Stock</h6>
+                        </div>
+                        <div class="card-body">
+                            <div class="table-responsive">
+                                <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                                    <thead>
+                                        <tr>
+                                            <th>Stockid</th>
+                <th>Prixunitaires</th>
+                <th>Codeproduits</th>
+                <th>Quantites</th>
+                <th>Daterestocks</th>
+                <th>actions</th>
+                                        </tr>
+                                    </thead>
+                              
+                                    <tbody>
+                                     {% for stock in stocks %}
+                                       <tr>
+                <td>{{ stock.stockid }}</td>
+                <td>{{ stock.prixunitaires }}</td>
+                <td>{{ stock.codeproduits }}</td>
+                <td>{{ stock.quantites }}</td>
+                <td>{{ stock.daterestocks ? stock.daterestocks|date('Y-m-d') : '' }}</td>
+                <td>
+                    <a href="{{ path('app_stock_show', {'stockid': stock.stockid}) }}">show</a>
+                    <a href="{{ path('app_stock_edit', {'stockid': stock.stockid}) }}">edit</a>
+                </td>
+            </tr>
+                                {% else %}
+            <tr>
+                <td colspan="6">no records found</td>
+            </tr>
+        {% endfor %}        
+                                       
+                                    </tbody>
+                                </table>
+                                <a href="{{ path('app_stock_new') }}">Create new</a>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+                {% endblock %}
