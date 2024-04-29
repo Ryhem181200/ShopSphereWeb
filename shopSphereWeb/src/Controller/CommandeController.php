@@ -26,6 +26,19 @@ class CommandeController extends AbstractController
         ]);
 
     }
+     #[Route('/affichfront', name: 'app_commande_affichfront', methods: ['GET'])]
+    public function affichfront(EntityManagerInterface $entityManager): Response
+    {
+        $commandes = $entityManager
+            ->getRepository(Commande::class)
+            ->findAll();
+
+        return $this->render('commande/affichfront.html.twig', [
+            'commandes' => $commandes,
+           
+        ]);
+
+    }
 
     #[Route('/new', name: 'app_commande_new', methods: ['GET', 'POST'])]
     public function new(Request $request, EntityManagerInterface $entityManager): Response
@@ -54,7 +67,13 @@ class CommandeController extends AbstractController
             'commande' => $commande,
         ]);
     }
-
+ #[Route('/frontshow/{idCommande}', name: 'app_commande_show', methods: ['GET'])]
+    public function frontshow(Commande $commande): Response
+    {
+        return $this->render('commande/frontshow.html.twig', [
+            'commande' => $commande,
+        ]);
+    }
     #[Route('/{idCommande}/edit', name: 'app_commande_edit', methods: ['GET', 'POST'])]
     public function edit(Request $request, Commande $commande, EntityManagerInterface $entityManager): Response
     {

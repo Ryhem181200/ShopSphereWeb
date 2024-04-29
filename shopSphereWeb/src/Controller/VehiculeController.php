@@ -24,7 +24,17 @@ class VehiculeController extends AbstractController
             'vehicules' => $vehicules,
         ]);
     }
+ #[Route('/affichfront', name: 'app_vehicule_affichfront', methods: ['GET'])]
+    public function affichfront(EntityManagerInterface $entityManager): Response
+    {
+        $vehicules = $entityManager
+            ->getRepository(Vehicule::class)
+            ->findAll();
 
+        return $this->render('vehicule/affichfront.html.twig', [
+            'vehicules' => $vehicules,
+        ]);
+    }
     #[Route('/new', name: 'app_vehicule_new', methods: ['GET', 'POST'])]
     public function new(Request $request, EntityManagerInterface $entityManager): Response
     {
@@ -49,6 +59,13 @@ class VehiculeController extends AbstractController
     public function show(Vehicule $vehicule): Response
     {
         return $this->render('vehicule/show.html.twig', [
+            'vehicule' => $vehicule,
+        ]);
+    }
+ #[Route('/showfront/{idvehicule}', name: 'app_vehicule_showfront', methods: ['GET'])]
+    public function showfront(Vehicule $vehicule): Response
+    {
+        return $this->render('vehicule/showfront.html.twig', [
             'vehicule' => $vehicule,
         ]);
     }
