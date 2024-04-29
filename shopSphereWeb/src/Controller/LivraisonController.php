@@ -24,6 +24,17 @@ class LivraisonController extends AbstractController
             'livraisons' => $livraisons,
         ]);
     }
+     #[Route('/affichfront', name: 'app_livraison_affichfront', methods: ['GET'])]
+    public function affichfront(EntityManagerInterface $entityManager): Response
+    {
+        $livraisons = $entityManager
+            ->getRepository(Livraison::class)
+            ->findAll();
+
+        return $this->render('livraison/affichfront.html.twig', [
+            'livraisons' => $livraisons,
+        ]);
+    }
 
     #[Route('/new', name: 'app_livraison_new', methods: ['GET', 'POST'])]
     public function new(Request $request, EntityManagerInterface $entityManager): Response
@@ -52,7 +63,13 @@ class LivraisonController extends AbstractController
             'livraison' => $livraison,
         ]);
     }
-
+ #[Route('/showfront/{idlivraison}', name: 'app_livraison_showfront', methods: ['GET'])]
+    public function showfront(Livraison $livraison): Response
+    {
+        return $this->render('livraison/showfront.html.twig', [
+            'livraison' => $livraison,
+        ]);
+    }
     #[Route('/{idlivraison}/edit', name: 'app_livraison_edit', methods: ['GET', 'POST'])]
     public function edit(Request $request, Livraison $livraison, EntityManagerInterface $entityManager): Response
     {

@@ -24,7 +24,17 @@ class TransactionController extends AbstractController
             'transactions' => $transactions,
         ]);
     }
+ #[Route('/affichfront', name: 'app_transaction_affichfront', methods: ['GET'])]
+    public function affichfront(EntityManagerInterface $entityManager): Response
+    {
+        $transactions = $entityManager
+            ->getRepository(Transaction::class)
+            ->findAll();
 
+        return $this->render('transaction/affichfront.html.twig', [
+            'transactions' => $transactions,
+        ]);
+    }
     #[Route('/new', name: 'app_transaction_new', methods: ['GET', 'POST'])]
     public function new(Request $request, EntityManagerInterface $entityManager): Response
     {
@@ -49,6 +59,13 @@ class TransactionController extends AbstractController
     public function show(Transaction $transaction): Response
     {
         return $this->render('transaction/show.html.twig', [
+            'transaction' => $transaction,
+        ]);
+    }
+#[Route('/showfront/{transactionid}', name: 'app_transaction_showfront', methods: ['GET'])]
+    public function showfront(Transaction $transaction): Response
+    {
+        return $this->render('transaction/showfront.html.twig', [
             'transaction' => $transaction,
         ]);
     }
