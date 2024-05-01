@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Stocks List</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+</head>
+<body>
+    <div class="container-fluid p-5"> <!-- Full-width container with padding -->
+        <h1 class="text-center">Stocks</h1> <!-- Centered heading -->
+     <table style="width: 100%; border: 1px solid #ddd; border-collapse: collapse;">
+    <thead style="background-color: #343a40; color: white;">
+        <tr>
+            <th style="padding: 8px; text-align: left;">ID</th>
+            <th style="padding: 8px; text-align: left;">Prix</th>
+            <th style="padding: 8px; text-align: left;">Code</th>
+            <th style="padding: 8px; text-align: left;">Quantité</th>
+            <th style="padding: 8px; text-align: left;">Date</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for item in stocks %}
+        <tr>
+            <td style="padding: 8px; border: 1px solid #ddd;">{{ item.stockid }}</td>
+            <td style="padding: 8px; border: 1px solid #ddd;">{{ item.prixunitaires }}</td>
+            <td style="padding: 8px; border: 1px solid #ddd;">{{ item.codeproduits }}</td>
+            <td style="padding: 8px; border: 1px solid #ddd;">{{ item.quantites }}</td>
+            <td style="padding: 8px; border: 1px solid #ddd;">{{ item.daterestocks ? item.daterestocks|date('Y-m-d') : '' }}</td>
+        </tr>
+        {% else %}
+        <tr>
+            <td colspan="5" style="text-align: center; padding: 8px; border: 1px solid #ddd;">No records found</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+    </div>
+    <!-- Include Bootstrap JavaScript -->
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+</body>
+</html>

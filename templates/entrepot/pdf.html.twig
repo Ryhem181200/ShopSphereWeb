@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Entrepots List</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+</head>
+<body>
+    <div class="container-fluid p-5"> <!-- Full-width container with padding -->
+        <h1 class="text-center">Entrepots</h1> <!-- Centered heading -->
+     <table style="width: 100%; border: 1px solid #ddd; border-collapse: collapse;">
+    <thead style="background-color: #343a40; color: white;">
+        <tr>
+            <th style="padding: 8px; text-align: left;">Entrepotid</th>
+            <th style="padding: 8px; text-align: left;">Nome</th>
+            <th style="padding: 8px; text-align: left;">Adressee</th>
+            <th style="padding: 8px; text-align: left;">Capacitee</th>
+            <th style="padding: 8px; text-align: left;">Statute</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for item in entrepots %}
+        <tr>
+            <td style="padding: 8px; border: 1px solid #ddd;">{{ item.entrepotid }}</td>
+            <td style="padding: 8px; border: 1px solid #ddd;">{{ item.nome }}</td>
+            <td style="padding: 8px; border: 1px solid #ddd;">{{ item.adressee }}</td>
+            <td style="padding: 8px; border: 1px solid #ddd;">{{ item.capacitee }}</td>
+            <td style="padding: 8px; border: 1px solid #ddd;">{{ item.statute }}</td>
+        </tr>
+        {% else %}
+        <tr>
+            <td colspan="5" style="text-align: center; padding: 8px; border: 1px solid #ddd;">No records found</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+    </div>
+    <!-- Include Bootstrap JavaScript -->
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+</body>
+</html>

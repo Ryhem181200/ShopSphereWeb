@@ -34,7 +34,8 @@
     <a class="btn btn-primary" href="{{ path('app_stock_index') }}">back to list</a>
 
     <a class="btn btn-primary" href="{{ path('app_stock_edit', {'stockid': stock.stockid}) }}">edit</a>
-
+<div class="pt-2">
     {{ include('stock/_delete_form.html.twig') }}
+    </div>
     </div>
 {% endblock %}

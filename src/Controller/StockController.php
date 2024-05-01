@@ -10,15 +10,38 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Knp\Component\Pager\PaginatorInterface;
+use Dompdf\Dompdf;
+use Dompdf\Options;
 
 #[Route('/stock')]
 class StockController extends AbstractController
 {
     #[Route('/', name: 'app_stock_index', methods: ['GET'])]
-    public function index(StockRepository $stockRepository): Response
+    public function index(StockRepository $stockRepository,Request $request, PaginatorInterface $paginator): Response
     {
+        $stocks = $this->getDoctrine()->getRepository(Stock::class)->findAll();
+        $stocks = $paginator->paginate(
+            $stocks, /* query NOT result */
+            $request->query->getInt('page', 1), /*page number*/
+        2 /*limit per page*/
+        );
         return $this->render('stock/list.html.twig', [
-            'stocks' => $stockRepository->findAll(),
+            'stocks' => $stocks,
+        ]);
+    }
+
+    #[Route('/list', name: 'app_stockfront_index', methods: ['GET'])]
+    public function indexFront(StockRepository $stockRepository,Request $request, PaginatorInterface $paginator): Response
+    {
+        $stocks = $this->getDoctrine()->getRepository(Stock::class)->findAll();
+        $stocks = $paginator->paginate(
+            $stocks, /* query NOT result */
+            $request->query->getInt('page', 1), /*page number*/
+        2 /*limit per page*/
+        );
+        return $this->render('stock/list_front.html.twig', [
+            'stocks' => $stocks,
         ]);
     }
 
@@ -78,4 +101,66 @@ class StockController extends AbstractController
 
         return $this->redirectToRoute('app_stock_index', [], Response::HTTP_SEE_OTHER);
     }
+
+
+
+    #[Route('/admin/pdf', name: 'app_stock_pdf')]
+    public function pdfgenrator(StockRepository $stockRepository): Response
+    {
+        // Configure Dompdf according to your needs
+        $pdfOptions = new Options();
+        $pdfOptions->set('defaultFont', 'Arial');
+
+        // Instantiate Dompdf with our options
+        $dompdf = new Dompdf($pdfOptions);
+        $stocks = $stockRepository->findAll();
+
+        // Retrieve the HTML generated in our twig file
+        $html = $this->renderView('stock\pdf.html.twig', [
+            'stocks' => $stocks,
+        ]);
+
+        // Load HTML to Dompdf
+        $dompdf->loadHtml($html);
+
+        // (Optional) Setup the paper size and orientation 'portrait' or 'portrait'
+        $dompdf->setPaper('A3', 'portrait');
+
+        // Render the HTML as PDF
+        $dompdf->render();
+
+       
+
+        return new Response (
+            $dompdf->stream('Stocks.pdf"', ["Attachment" => false]),
+            Response::HTTP_OK,
+            ['Content-Type' => 'application/pdf']
+        );
+
+    }
+
+    #[Route('/calendar/show', name: 'app_stock_calendar')]
+    public function calendar(StockRepository $stockRepository): Response
+    {
+        $events = $stockRepository->findAll();
+
+        $rdvs = [];
+
+        foreach($events as $event){
+            $color = '#808080';
+            $textColor = '#ffffff';
+            $rdvs[] = [
+                'id' => $event->getStockid(),
+                'start' => $event->getDaterestocks()->format('Y-m-d'),
+                'backgroundColor' => $color,
+                'textColor' => $textColor,
+                
+            ];
+        }
+
+        $data = json_encode($rdvs);
+
+        return $this->render('stock/calendar.html.twig', compact('data'));
+    }
+
 }
