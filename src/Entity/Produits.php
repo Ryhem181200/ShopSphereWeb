@@ -18,7 +18,7 @@ class Produits
     #[ORM\Column(length: 255)]
     #[Assert\NotBlank(message:"Nom is required")]
     #[Assert\Length(  min : 2,
-         max :20,
+         max :30,
         minMessage :"nom must be at least {{ limit }} characters long",
         maxMessage : "nom cannot be longer than {{ limit }} characters")]
     private ?string $nom = null;
@@ -31,7 +31,7 @@ class Produits
     #[ORM\Column(length: 255, nullable: true)]
     #[Assert\NotBlank(message:"description is required")]
     #[Assert\Length(  min : 8,
-         max :60,
+         max :1000,
         minMessage :"description must be at least {{ limit }} characters long",
         maxMessage : "description cannot be longer than {{ limit }} characters")]
     private ?string $description = null;
