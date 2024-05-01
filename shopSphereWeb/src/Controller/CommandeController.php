@@ -26,6 +26,39 @@ class CommandeController extends AbstractController
         ]);
 
     }
+  #[Route('/triecommande', name:'app_trie_commande', methods: ['GET'])]
+public function trierCommandeParEvenement(EntityManagerInterface $entityManager, Request $request): Response
+{
+    if ($request->isXmlHttpRequest()) {
+        // Récupérer les paramètres de tri depuis la requête AJAX
+        $tri = $request->query->get('tri');
+
+        // Votre logique de tri des commandes en fonction des paramètres reçus
+        if ($tri === 'ASC') { // Changer ASC à DESC pour trier de façon descendante
+            $commandes = $entityManager
+                ->getRepository(Commande::class)
+                ->findBy([], ['idCommande' => 'DESC']); // Changer DESC à ASC pour trier de façon descendante
+        } else {
+            $commandes = $entityManager
+                ->getRepository(Commande::class)
+                ->findBy([], ['idCommande' => 'ASC']);
+        }
+
+        // Convertir les données triées en JSON et les renvoyer
+        return $this->json($commandes);
+    }
+
+    // Si ce n'est pas une requête AJAX, renvoyer la page HTML normale
+    $commandes = $entityManager
+        ->getRepository(Commande::class)
+        ->findBy([], ['idCommande' => 'DESC']);
+
+    return $this->render('commande/affichfront.html.twig', [
+        'commandes' => $commandes,
+    ]);
+}
+
+
      #[Route('/affichfront', name: 'app_commande_affichfront', methods: ['GET'])]
     public function affichfront(EntityManagerInterface $entityManager): Response
     {

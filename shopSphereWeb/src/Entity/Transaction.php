@@ -20,7 +20,7 @@ class Transaction
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
     private $transactionid;
-
+ 
     /**
      * @var string|null
      *
@@ -34,7 +34,30 @@ class Transaction
      * @ORM\Column(name="receiver", type="string", length=255, nullable=true, options={"default"="NULL"})
      */
     private $receiver = '';
+ /**
+     * @var string|null
+     *
+     * @ORM\Column(name="qrcode", type="string", length=255, nullable=true)
+     */
+    private $qrcode;
 
+    /**
+     * Get the QR code filename.
+     */
+    public function getQrcode(): ?string
+    {
+        return $this->qrcode;
+    }
+
+    /**
+     * Set the QR code filename.
+     */
+    public function setQrcode(?string $qrcode): self
+    {
+        $this->qrcode = $qrcode;
+
+        return $this;
+    }
     /**
      * @var float|null
      *
