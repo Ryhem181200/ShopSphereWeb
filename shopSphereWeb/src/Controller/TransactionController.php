@@ -9,7 +9,8 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-
+use Endroid\QrCode\QrCode;
+use Endroid\QrCode\Writer\PngWriter;
 #[Route('/transaction')]
 class TransactionController extends AbstractController
 {
@@ -35,33 +36,64 @@ class TransactionController extends AbstractController
             'transactions' => $transactions,
         ]);
     }
-    #[Route('/new', name: 'app_transaction_new', methods: ['GET', 'POST'])]
-    public function new(Request $request, EntityManagerInterface $entityManager): Response
-    {
-        $transaction = new Transaction();
-        $form = $this->createForm(TransactionType::class, $transaction);
-        $form->handleRequest($request);
+   #[Route('/new', name: 'app_transaction_new', methods: ['GET', 'POST'])]
+public function new(Request $request, EntityManagerInterface $entityManager): Response
+{
+    $transaction = new Transaction();
+    $form = $this->createForm(TransactionType::class, $transaction);
+    $form->handleRequest($request);
 
-        if ($form->isSubmitted() && $form->isValid()) {
-            $entityManager->persist($transaction);
-            $entityManager->flush();
+    if ($form->isSubmitted() && $form->isValid()) {
+        $entityManager->persist($transaction);
+        $entityManager->flush();
 
-            return $this->redirectToRoute('app_transaction_index', [], Response::HTTP_SEE_OTHER);
-        }
+        // Generate and save QR code
+        $qrCodeFilename = $this->generateAndSaveQrCode($transaction);
 
-        return $this->renderForm('transaction/new.html.twig', [
-            'transaction' => $transaction,
-            'form' => $form,
-        ]);
+        // Store QR code filename in the transaction entity
+        $transaction->setQrcode($qrCodeFilename); // Corrected variable name
+        $entityManager->flush();
+
+        return $this->redirectToRoute('app_transaction_index', [], Response::HTTP_SEE_OTHER);
     }
 
-    #[Route('/{transactionid}', name: 'app_transaction_show', methods: ['GET'])]
-    public function show(Transaction $transaction): Response
-    {
-        return $this->render('transaction/show.html.twig', [
-            'transaction' => $transaction,
-        ]);
+    return $this->renderForm('transaction/new.html.twig', [
+        'transaction' => $transaction,
+        'form' => $form,
+    ]);
+}
+
+
+    // Function to generate and save QR code
+ private function generateAndSaveQrCode(Transaction $transaction): string
+{
+    $data = "Transaction ID: " . $transaction->getTransactionid(). "- Receiver : " . $transaction->getReceiver() . "- Sender : " . $transaction->getSender() . "- Amount : " . $transaction->getAmount();
+
+    $qrCode = new QrCode($data);
+    $qrCode->setSize(300);
+
+    $qrDirectory = $this->getParameter('kernel.project_dir') . '/public/qrcodes';
+    if (!file_exists($qrDirectory)) {
+        mkdir($qrDirectory, 0777, true);
     }
+
+    $filename = 'transaction-' . $transaction->getTransactionid() . '.png';
+    $writer = new PngWriter();
+    // Generate the QR code and save it to a file
+    $writer->write($qrCode)->saveToFile($qrDirectory . '/' . $filename);
+
+    return $filename;
+}
+#[Route('/{transactionid}', name: 'app_transaction_show', methods: ['GET'])]
+public function show(Transaction $transaction): Response
+{
+    return $this->render('transaction/show.html.twig', [
+        'transaction' => $transaction,
+    ]);
+}
+
+    
+
 #[Route('/showfront/{transactionid}', name: 'app_transaction_showfront', methods: ['GET'])]
     public function showfront(Transaction $transaction): Response
     {
