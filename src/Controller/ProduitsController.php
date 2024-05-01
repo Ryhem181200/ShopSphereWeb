@@ -36,25 +36,28 @@ class ProduitsController extends AbstractController
         ]);
     }
 
-    #[Route('/new', name: 'app_produits_new', methods: ['GET', 'POST'])]
-    public function new(Request $request, EntityManagerInterface $entityManager): Response
-    {
-        $produit = new Produits();
-        $form = $this->createForm(ProduitsType::class, $produit);
-        $form->handleRequest($request);
+        
+ #[Route('/new', name: 'app_produits_new', methods: ['GET', 'POST'])]
+ public function new(Request $request, EntityManagerInterface $entityManager): Response
+ {
+     $produit = new Produits();
+     
+     // Utilisez le formulaire ProduitsType avec les modifications apportées
+     $form = $this->createForm(ProduitsType::class, $produit);
+     $form->handleRequest($request);
 
-        if ($form->isSubmitted() && $form->isValid()) {
-            $entityManager->persist($produit);
-            $entityManager->flush();
+     if ($form->isSubmitted() && $form->isValid()) {
+         $entityManager->persist($produit);
+         $entityManager->flush();
 
-            return $this->redirectToRoute('app_produits_index', [], Response::HTTP_SEE_OTHER);
-        }
+         return $this->redirectToRoute('app_produits_index', [], Response::HTTP_SEE_OTHER);
+     }
 
-        return $this->renderForm('produits/new.html.twig', [
-            'produit' => $produit,
-            'form' => $form,
-        ]);
-    }
+     return $this->renderForm('produits/new.html.twig', [
+         'produit' => $produit,
+         'form' => $form,
+     ]);
+ }
 
     #[Route('/{id}', name: 'app_produits_show', methods: ['GET'])]
     public function show(Produits $produit): Response
@@ -68,18 +71,19 @@ class ProduitsController extends AbstractController
     public function edit(Request $request, Produits $produit, EntityManagerInterface $entityManager): Response
     {
         $form = $this->createForm(ProduitsType::class, $produit);
+
         $form->handleRequest($request);
 
-        if ($form->isSubmitted() && $form->isValid()) {
-            $entityManager->flush();
+    if ($form->isSubmitted() && $form->isValid()) {
+        $entityManager->flush();
 
-            return $this->redirectToRoute('app_produits_index', [], Response::HTTP_SEE_OTHER);
-        }
+        return $this->redirectToRoute('app_produits_index', [], Response::HTTP_SEE_OTHER);
+    }
 
-        return $this->renderForm('produits/edit.html.twig', [
-            'produit' => $produit,
-            'form' => $form,
-        ]);
+    return $this->renderForm('produits/edit.html.twig', [
+        'produit' => $produit,
+        'form' => $form,
+    ]);
     }
 
     #[Route('/{id}', name: 'app_produits_delete', methods: ['POST'])]

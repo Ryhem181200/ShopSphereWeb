@@ -18,7 +18,7 @@ class Produits
     #[ORM\Column(length: 255)]
     #[Assert\NotBlank(message:"Nom is required")]
     #[Assert\Length(  min : 2,
-         max :8,
+         max :20,
         minMessage :"nom must be at least {{ limit }} characters long",
         maxMessage : "nom cannot be longer than {{ limit }} characters")]
     private ?string $nom = null;
@@ -38,10 +38,10 @@ class Produits
 
     #[ORM\Column(length: 255, nullable: true)]
     #[Assert\NotBlank(message:"categorie is required")]
-    #[Assert\Length(  min : 8,
-         max :60,
-        minMessage :"categorie must be at least {{ limit }} characters long",
-        maxMessage : "categorie cannot be longer than {{ limit }} characters")]
+    #[Assert\Choice(
+        choices: ["Électronique", "Mode", "Maison et Jardin", "Beauté et Soins Personnels", "Sports et Loisirs", "Livres et Médias", "Alimentation et Boissons", "Santé et Bien-être", "Bébés et Enfants", "Animaux de compagnie"],
+        message: "Invalid category selected"
+    )]
     private ?string $categorie = null;
 
     #[ORM\Column(type: Types::DATE_MUTABLE, nullable: true)]
@@ -52,9 +52,22 @@ class Produits
         minMessage: "Date must be in the year 2024",
         maxMessage: "Date must be in the year 2024"
     )]
-
+   
+ 
     private ?\DateTimeInterface $dateajout = null;
+    
+    
+    public function getProduit(): ?Produits
+    {
+        return $this->produit;
+    }
 
+    public function setProduit(?Produits $produit): static
+    {
+        $this->produit = $produit;
+
+        return $this;
+    }
     public function getId(): ?int
     {
         return $this->id;
@@ -117,6 +130,11 @@ class Produits
     {
         $this->dateajout = $dateajout;
 
+       
         return $this;
+    }
+    public function __toString(): string
+    {
+        return $this->nom . ' - ' . $this->categorie . ' - ' . $this->prix . ' - ' . $this->description;
     }
 }

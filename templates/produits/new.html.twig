@@ -275,11 +275,12 @@
                     {{ form_widget(form.description, {'attr': {'class': 'form-control'}}) }}
                     {{ form_errors(form.description) }}
                 </div>
-                <div class="form-group">
-                    <label for="{{ form.categorie.vars.id }}">Catégorie</label>
-                    {{ form_widget(form.categorie, {'attr': {'class': 'form-control'}}) }}
-                    {{ form_errors(form.categorie) }}
-                </div>
+              <div class="form-group">
+    <label for="{{ form.categorie.vars.id }}">Catégorie</label>
+    {{ form_widget(form.categorie, {'attr': {'class': 'form-control'}}) }}
+    {{ form_errors(form.categorie) }}
+</div>
+
                 <div class="form-group">
                     <label for="{{ form.dateajout.vars.id }}">Date d'ajout</label>
                     {{ form_widget(form.dateajout, {'attr': {'class': 'form-control'}}) }}

@@ -11,6 +11,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Knp\Component\Pager\PaginatorInterface;
+use App\Service\Pdf;
 
 
 #[Route('/vente')]
@@ -37,23 +38,40 @@ class VenteController extends AbstractController
     #[Route('/new', name: 'app_vente_new', methods: ['GET', 'POST'])]
     public function new(Request $request, EntityManagerInterface $entityManager): Response
     {
+    
         $vente = new Vente();
         $form = $this->createForm(VenteType::class, $vente);
         $form->handleRequest($request);
-
+    
+    
         if ($form->isSubmitted() && $form->isValid()) {
-            $entityManager->persist($vente);
-            $entityManager->flush();
+    
+            $produit = $form->get('idProduit')->getData();
+            $quantiteVendu = $form->get('quantitevendu')->getData();
+            $montanttotal = $form->get('montanttotal')->getData();
 
+
+                $entityManager->persist($vente);
+                $entityManager->flush();
+          
             return $this->redirectToRoute('app_vente_show', ['id' => $vente->getId()]);
-        }
-
-        return $this->renderForm('vente/new.html.twig', [
-            'vente' => $vente,
-            'form' => $form,
+        
+            }
+    
+        return $this->render('vente/new.html.twig', [
+            'vente' => $vente, // Pass the vente entity to the template
+            'form' => $form->createView(),
         ]);
     }
-
+    
+    #[Route('/{id}/pdf', name: 'app_vente_pdf', methods: ['GET'])]
+    public function ventePdf(Vente $vente, Pdf $pdfService): Response
+    {
+        // Générer le PDF à partir des données de la vente
+        $pdfResponse = $pdfService->generateVentePdf($vente);
+    return $pdfResponse;
+    }
+    
     #[Route('/{id}', name: 'app_vente_show', methods: ['GET'])]
     public function show(Vente $vente): Response
     {

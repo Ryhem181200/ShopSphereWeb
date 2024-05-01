@@ -153,8 +153,10 @@
       <a href="{{ path('app_vente_new') }}" class="btn btn-secondary"><i class="bi bi-arrow-left"></i></a>
 
 <a href="{{ path('app_vente_edit', {'id': vente.id}) }}" class="btn btn-primary"><i class="bi bi-pencil"></i></a>
+                     <a href="{{ path('app_vente_pdf', {'id': vente.id}) }}" ><i class="fas fa-trash-alt text-danger"></i>PDF</a>
 
      <form action="{{ path('app_vente_delete', {'id': vente.id}) }}" method="post" style="display: inline-block;">
+
             <input type="hidden" name="_method" value="DELETE">
             <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ vente.id) }}">
             <button type="submit" class="btn btn-danger" onclick="return confirm('Êtes-vous sûr de vouloir supprimer cette vente ?')"><i class="bi bi-trash"></i></button>
